@@ -25,7 +25,7 @@ jobs:
       run: |
         git config --global user.name 'github-actions[bot]'
         git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-        git ls-files --others --exclude-standard | grep '\.json$' | xargs git add
+        git status --short | grep '?? .*\.json' | awk '{print $2}' | xargs git add
         git commit -m "Add new files with JSON content"
         git push
       env:
