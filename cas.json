@@ -1,0 +1,11 @@
+{
+  "type": "environment",
+  "id": "338df34d-ea79-4f84-983b-0432c380794b",
+  "name": "cas",
+  "slug": "cas",
+  "color": "#B3B8C0",
+  "is_default": false,
+  "is_active": true,
+  "created": "2024-11-12T08:51:45.696Z",
+  "cloud_account": "ba82988e-4262-4707-9746-03ee30f63ba4"
+}
