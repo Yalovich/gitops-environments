@@ -1,7 +1,7 @@
 {
   "type": "environment",
   "id": "b1597bff-7d88-47ed-b626-9d7479cb647c",
-  "name": "acv2",
+  "name": "Changed in GitOps",
   "slug": "acv",
   "color": "#9C0000",
   "is_default": false,
