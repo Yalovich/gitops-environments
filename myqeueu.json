@@ -1,0 +1,5 @@
+{
+  "visibility_timeout_seconds": 300,
+  "redrive_policy_max_receive_count": 5,
+  "message_retention_seconds": 1209600
+}
