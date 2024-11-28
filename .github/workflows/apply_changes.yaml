@@ -1,24 +1,28 @@
 name: Apply Changes on Bluebricks
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types:
+      - closed
 
 jobs:
   apply-changes-to-environments:
     runs-on: ubuntu-latest
     strategy:
         fail-fast: true
-    
+    if: github.event.pull_request.merged == true
     steps:
-    - name: Checkout repository content
-      uses: actions/checkout@v4
+    - name: Set up GitHub CLI
+      run: |
+          sudo apt-get install -y gh
+          gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
 
     - name: Get Changed Files
       id: changed-files
       run: |
-          git diff --name-only ${{ github.event.before }} ${{ github.sha }} > diff.txt
+        gh api \
+        repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files \
+        --jq '.[].filename' > diff.txt
 
     - name: Read Changed Files
       id: read-changed-files
