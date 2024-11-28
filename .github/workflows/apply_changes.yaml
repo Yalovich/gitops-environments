@@ -56,9 +56,8 @@ jobs:
           else
             # echo "File $file is not a valid JSON file. Skipping."
           fi
-        done < diff.txt
 
-        # echo "JSON validation and filtering complete."
+        done < diff.txt
       shell: bash
 
     - name: Fetch environments
