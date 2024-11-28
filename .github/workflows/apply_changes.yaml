@@ -29,9 +29,8 @@ jobs:
 
     - name: Fetch environments
       run: |
-        cat $JWT
-        cat 'https://api.bluebricks.co/api/v1/environments?all=true&expand=false&limit=10&offset=0' --header 'Authorization: Bearer $JWT'
-        curl -s -f -o response.json --location 'https://api.bluebricks.co/api/v1/environments?all=true&expand=false&limit=10&offset=0' --header 'Authorization: Bearer ${{ secrets.JWT }}'
+        curl -s -f -o response.json --location 'https://api.bluebricks.co/api/v1/environments?all=true&expand=false&limit=100&offset=0' --header 'Authorization: Bearer ${{ secrets.JWT }}'
+        cat response.json
 
     - name: Read Changed Files
       id: read-changed-files
