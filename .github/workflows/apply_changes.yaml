@@ -65,8 +65,8 @@ jobs:
       run: |
         curl -s -f -o response.json --location 'https://api.bluebricks.co/api/v1/environments?all=true&expand=false&limit=100&offset=0' --header 'Authorization: Bearer ${{ secrets.JWT }}'
 
-    - name: Read Changed Files
-      id: read-changed-files
+    - name: Applying Changes
+      id: apply-changes
       run: |
           for file in valid_json_files/*.json; do
             # Check if there are any JSON files
@@ -88,16 +88,14 @@ jobs:
                 -H "Content-Type: application/json" \
                 -H "Authorization: Bearer ${{ secrets.JWT }}" \
                 -d "$modified_json")
-              file_name=$(basename "$file")
-              
-              echo ----> "$file_name"
-              
+              file_name=$(basename "$file")              
 
               git config user.name "github-actions[bot]"
               git config user.email "github-actions[bot]@users.noreply.github.com"
-              echo "$response" > "$file_name"
+              new_json=$(echo "$response" | jq '. + {"type": "environment"}')
+              echo "$new_json" > "$file_name"
               git add "$file_name"
-              git commit -m '"$file_name" gitops sync'
+              git commit -m 'gitops sync'
               git push
             fi
           done
