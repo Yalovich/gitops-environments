@@ -24,10 +24,19 @@ jobs:
         repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files \
         --jq '.[].filename' > diff.txt
 
+    - name: Fetch environments
+      run: |
+        cat "${{ secrets.JWT }}"
+        cat 'https://api.bluebricks.co/api/v1/environments?all=true&expand=false&limit=10&offset=0' --header 'Authorization: Bearer ${{ secrets.JWT }}'
+        curl -s -f -o response.json --location 'https://api.bluebricks.co/api/v1/environments?all=true&expand=false&limit=10&offset=0' --header 'Authorization: Bearer ${{ secrets.JWT }}'
+
     - name: Read Changed Files
       id: read-changed-files
       run: |
-          cat diff.txt
+          while read -r file; do
+            echo "Contents of $file:"
+            cat "$file"
+          done < merged_files.txt
 
     # - name: Fetch environments
     #   run: |
