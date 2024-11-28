@@ -20,15 +20,15 @@ jobs:
           sudo apt-get install -y gh
           gh auth login --with-token <<< "${{ secrets.GITHUB_TOKEN }}"
 
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
     - name: Get Changed Files
       id: changed-files
       run: |
         gh api \
         repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files \
         --jq '.[].filename' > diff.txt
-
-    - name: Checkout Code
-      uses: actions/checkout@v3
 
     - name: Read diff.txt and Validate JSON
       run: |
