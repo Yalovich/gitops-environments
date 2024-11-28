@@ -58,12 +58,6 @@ jobs:
           fi
         done < diff.txt
 
-        ls -1 valid_json_files
-        for file in valid_json_files/*; do
-          # echo "Processing valid JSON file: $file"
-          # Add logic to process each valid JSON file
-        done
-
         # echo "JSON validation and filtering complete."
       shell: bash
 
