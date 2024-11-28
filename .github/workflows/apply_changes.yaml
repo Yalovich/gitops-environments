@@ -84,10 +84,11 @@ jobs:
               echo "File $file does not contain the 'id' property."
               modified_json=$(jq 'del(.type)' "$file")
                # Send the POST request
-              curl -X POST "https://api.bluebricks.co/api/v1/environment" \
+              response=$(curl -X POST "https://api.bluebricks.co/api/v1/environment" \
                 -H "Content-Type: application/json" \
                 -H "Authorization: Bearer ${{ secrets.JWT }}" \
-                -d "$modified_json"
+                -d "$modified_json")
+              echo "$response" > $file
               # curl -X PUT -H "Content-Type: application/json" -d "$modified_json" "https://example.com/endpoint"
             fi
           done
