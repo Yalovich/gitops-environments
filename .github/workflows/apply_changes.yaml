@@ -27,6 +27,9 @@ jobs:
         repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files \
         --jq '.[].filename' > diff.txt
 
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
     - name: Read diff.txt and Validate JSON
       run: |
         mkdir -p valid_json_files
