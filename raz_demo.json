@@ -1,1 +1,10 @@
-{"type":"environment", "name": "Raz Environment"}
+{
+  "id": "ada2d14f-0340-4bb1-8c5d-2f6fe0c8b794",
+  "slug": "raz-environment",
+  "name": "Raz Environment",
+  "color": "#B3B8C0",
+  "is_default": false,
+  "is_active": true,
+  "created": "2024-11-28T14:25:05.943Z",
+  "type": "environment"
+}
