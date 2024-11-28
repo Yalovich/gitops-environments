@@ -89,8 +89,16 @@ jobs:
                 -H "Authorization: Bearer ${{ secrets.JWT }}" \
                 -d "$modified_json")
               file_name=$(basename "$file")
+              
+              echo ----> "$file_name"
+              
+
+              git config user.name "github-actions[bot]"
+              git config user.email "github-actions[bot]@users.noreply.github.com"
               echo "$response" > "$file_name"
-              # curl -X PUT -H "Content-Type: application/json" -d "$modified_json" "https://example.com/endpoint"
+              git add "$file_name"
+              git commit -m '"$file_name" gitops sync'
+              git push
             fi
           done
 
