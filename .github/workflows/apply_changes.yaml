@@ -100,8 +100,7 @@ jobs:
 
               echo "$new_json" > "$file_name"
               git add "$file_name"
-              git commit -m 'gitops sync'
-              git push    
+              echo Adding "$file_name" to sync 
               
             else
               echo "File $file does not contain the 'id' property."
@@ -115,13 +114,21 @@ jobs:
 
               git config user.name "github-actions[bot]"
               git config user.email "github-actions[bot]@users.noreply.github.com"
+
               new_json=$(echo "$response" | jq '. + {"type": "environment"}')
+
               echo "$new_json" > "$file_name"
               git add "$file_name"
-              git commit -m 'gitops sync'
-              git push
+              echo Adding "$file_name" to sync 
             fi
           done
+
+          rm -rf valid_json_files
+          rm -f diff.txt
+          rm -f response.json
+
+          git commit -m 'gitops sync'
+          git push
 
     - name: Clean Working Space
       run: |
