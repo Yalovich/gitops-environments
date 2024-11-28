@@ -80,6 +80,29 @@ jobs:
             # Use jq to check for the "id" property
             if jq -e 'has("id")' "$file" >/dev/null 2>&1; then
               echo "File $file contains the 'id' property."
+              
+              slug=$(jq -r '.slug' "$file")
+              id=$(jq -r '.id' "$file")
+
+              modified_json=$(jq 'del(.slug, .id, .is_default, .is_active, .created, .type)' "$file")
+
+              response=$(curl -X PUT "https://api.bluebricks.co/api/v1/environment/$slug/edit" \
+                -H "Content-Type: application/json" \
+                -H "Authorization: Bearer ${{ secrets.JWT }}" \
+                -d "$modified_json")
+
+              file_name=$(basename "$file")      
+
+              git config user.name "github-actions[bot]"
+              git config user.email "github-actions[bot]@users.noreply.github.com"
+
+              new_json=$(echo "$response" | jq '. + {"type": "environment"}')
+              
+              echo "$new_json" > "$file_name"
+              git add "$file_name"
+              git commit -m 'gitops sync'
+              git push    
+              
             else
               echo "File $file does not contain the 'id' property."
               modified_json=$(jq 'del(.type)' "$file")
