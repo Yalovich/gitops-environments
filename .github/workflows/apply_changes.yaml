@@ -76,6 +76,8 @@ jobs:
             fi
 
             echo "Checking file: $file"
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
 
             # Use jq to check for the "id" property
             if jq -e 'has("id")' "$file" >/dev/null 2>&1; then
@@ -92,10 +94,6 @@ jobs:
                 -d "$modified_json")
 
               file_name=$(basename "$file")      
-
-              git config user.name "github-actions[bot]"
-              git config user.email "github-actions[bot]@users.noreply.github.com"
-
               new_json=$(echo "$response" | jq '. + {"type": "environment"}')
 
               echo "$new_json" > "$file_name"
@@ -110,11 +108,8 @@ jobs:
                 -H "Content-Type: application/json" \
                 -H "Authorization: Bearer ${{ secrets.JWT }}" \
                 -d "$modified_json")
+              
               file_name=$(basename "$file")              
-
-              git config user.name "github-actions[bot]"
-              git config user.email "github-actions[bot]@users.noreply.github.com"
-
               new_json=$(echo "$response" | jq '. + {"type": "environment"}')
 
               echo "$new_json" > "$file_name"
@@ -127,8 +122,13 @@ jobs:
           rm -f diff.txt
           rm -f response.json
 
-          git commit -m 'gitops sync'
-          git push
+          if [[ -n "$(git status --porcelain)" ]]; then
+            echo "Changes detected. Committing changes."
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m 'gitops sync'
+            git push
+          fi
 
     - name: Clean Working Space
       run: |
