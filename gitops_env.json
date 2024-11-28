@@ -1,4 +1,10 @@
 {
-  "type": "environment",
-  "name": "My GitOps Environment"
+  "id": "c1129220-fe44-4cba-b5c9-8ba337cc0074",
+  "slug": "my-gitops-environment",
+  "name": "My GitOps Environment",
+  "color": "#B3B8C0",
+  "is_default": false,
+  "is_active": true,
+  "created": "2024-11-28T13:24:10.309Z",
+  "type": "environment"
 }
