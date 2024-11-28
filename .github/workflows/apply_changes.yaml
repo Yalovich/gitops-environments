@@ -41,7 +41,7 @@ jobs:
 
         # Loop through files listed in diff.txt
         while IFS= read -r file; do
-          echo "Processing file: $file"
+          # echo "Processing file: $file"
           
           # Check if file exists
           if [[ ! -f "$file" ]]; then
@@ -54,17 +54,17 @@ jobs:
             echo "File $file is valid JSON. Copying to valid_json_files."
             cp "$file" valid_json_files/
           else
-            echo "File $file is not a valid JSON file. Skipping."
+            # echo "File $file is not a valid JSON file. Skipping."
           fi
         done < diff.txt
 
         ls -1 valid_json_files
         for file in valid_json_files/*; do
-          echo "Processing valid JSON file: $file"
+          # echo "Processing valid JSON file: $file"
           # Add logic to process each valid JSON file
         done
 
-        echo "JSON validation and filtering complete."
+        # echo "JSON validation and filtering complete."
       shell: bash
 
     - name: Fetch environments
@@ -74,23 +74,39 @@ jobs:
     - name: Read Changed Files
       id: read-changed-files
       run: |
-          while read -r file; do
-            echo "Contents of $file:"
-            cat "$file"
-          done < diff.txt
+          for file in valid_json_files/*.json; do
+            # Check if there are any JSON files
+            if [[ ! -f "$file" ]]; then
+              echo "No JSON files found in valid_json_files. Skipping."
+              break
+            fi
 
-    - name: Run JSON update script
-      run: |
-        # # Define the path to the large JSON file
-        # RESPONSE_JSON="response.json"
+            echo "Checking file: $file"
 
-        # # Loop through each small JSON file in the current directory
-        # for ENVS_JSON in *.json; do
-        #   # Skip the large JSON file
-        #   if [[ "$ENVS_JSON" == "$RESPONSE_JSON" ]]; then
-        #     continue
-        #   fi
+            # Use jq to check for the "id" property
+            if jq -e 'has("id")' "$file" >/dev/null 2>&1; then
+              echo "File $file contains the 'id' property."
+            else
+              echo "File $file does not contain the 'id' property."
+            fi
+          done
 
+    # - name: Run JSON update script
+    #   run: |
+    #     # Define the path to the large JSON file
+    #     RESPONSE_JSON="response.json"
+
+    #     # Loop through each small JSON file in the current directory
+    #     for ENVS_JSON in valid_json_files/*.json; do
+    #       # Skip the large JSON file
+    #       if [[ "$ENVS_JSON" == "$RESPONSE_JSON" ]]; then
+    #         continue
+    #       fi
+
+    #       # Extract the ID from the current small JSON file
+    #       ID=$(jq -r '.id' "$ENVS_JSON")
+
+    #     done
     #       # Extract the ID from the current small JSON file
     #       ID=$(jq -r '.id' "$ENVS_JSON")
 
@@ -133,7 +149,7 @@ jobs:
     #       else
     #         echo "No changes detected for ID: $ID from file $ENVS_JSON"
     #       fi
-    #     done
+        # done
 
     #     # remove temp files
     #     rm response.json
