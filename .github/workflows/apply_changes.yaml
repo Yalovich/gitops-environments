@@ -33,6 +33,7 @@ jobs:
     - name: Read diff.txt and Validate JSON
       run: |
         mkdir -p valid_json_files
+
         # Check if diff.txt exists
         if [[ ! -f diff.txt ]]; then
           echo "diff.txt not found. Exiting."
@@ -54,7 +55,7 @@ jobs:
             echo "File $file is valid JSON. Copying to valid_json_files."
             cp "$file" valid_json_files/
           else
-            # echo "File $file is not a valid JSON file. Skipping."
+            echo "File $file is not a valid JSON file. Skipping."
           fi
 
         done < diff.txt
