@@ -8,6 +8,9 @@ on:
 jobs:
   apply-changes-to-environments:
     runs-on: ubuntu-latest
+    environment: "Yalovich"
+    env: 
+      JWT: ${{ secrets.JWT }}
     strategy:
         fail-fast: true
     if: github.event.pull_request.merged == true
@@ -26,8 +29,8 @@ jobs:
 
     - name: Fetch environments
       run: |
-        cat "${{ secrets.JWT }}"
-        cat 'https://api.bluebricks.co/api/v1/environments?all=true&expand=false&limit=10&offset=0' --header 'Authorization: Bearer ${{ secrets.JWT }}'
+        cat $JWT
+        cat 'https://api.bluebricks.co/api/v1/environments?all=true&expand=false&limit=10&offset=0' --header 'Authorization: Bearer $JWT'
         curl -s -f -o response.json --location 'https://api.bluebricks.co/api/v1/environments?all=true&expand=false&limit=10&offset=0' --header 'Authorization: Bearer ${{ secrets.JWT }}'
 
     - name: Read Changed Files
