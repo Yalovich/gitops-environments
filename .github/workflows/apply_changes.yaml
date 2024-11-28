@@ -88,7 +88,8 @@ jobs:
                 -H "Content-Type: application/json" \
                 -H "Authorization: Bearer ${{ secrets.JWT }}" \
                 -d "$modified_json")
-              echo "$response" > $file
+              file_name=$(basename "$file")
+              echo "$response" > "$file_name"
               # curl -X PUT -H "Content-Type: application/json" -d "$modified_json" "https://example.com/endpoint"
             fi
           done
